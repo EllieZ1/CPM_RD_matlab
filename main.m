@@ -5,9 +5,9 @@ set(0,'DefaultFIgureVisible','on');
 %restarting the environment
 
 mkdir 'results'
-vid = VideoWriter(['results'],'MPEG-4'); % this saves videos to mp4 change to whatever's convenient
+%vid = VideoWriter(['results'],'MPEG-4'); % this saves videos to mp4 change to whatever's convenient
 
-open(vid);
+%open(vid);
 
 N_species=8; %number of chemical species
 finaltime=18000; %time the simulation end
@@ -135,11 +135,11 @@ while time<finaltime
             alpha_chem,time,diffuse_mask,PaxRatio,RhoRatio,K_is,K,...
             RacRatio,RbarRatio,I_Ks,reaction,ij_diffuse,jump,ir0,id0,...
             k_X,PIX,k_G,k_C,GIT,Paxtot,alpha_R,gamma,I_K,I_rho,I_R,L_R,m,L_rho,B_1,L_K,...
-            alpha,PAKtot] =  CPM_chem_func(x,diffusing_species_sum,D,h,alpha_rx,num_diffuse,...
+            alpha,PAKtot,numDiff,numReac] =  CPM_chem_func(x,diffusing_species_sum,D,h,alpha_rx,num_diffuse,...
             alpha_chem,time,diffuse_mask,PaxRatio,RhoRatio,K_is,K,...
             RacRatio,RbarRatio,I_Ks,reaction,ij_diffuse,jump,ir0,id0,cell_inds,...
             k_X,PIX,k_G,k_C,GIT,Paxtot,alpha_R,gamma,I_K,I_rho,I_R,L_R,m,L_rho,B_1,L_K,...
-            alpha,PAKtot,nrx,A);
+            alpha,PAKtot,nrx,A,numDiffu,numReac);
         
         reactions=reactions+nrx; %reaction counter
         
@@ -179,7 +179,7 @@ v=dx/120*3600;
 
 %saving final results 
 toc
-close(vid);
+%close(vid);
 cur=pwd;
 cd results
 save(['final'])
