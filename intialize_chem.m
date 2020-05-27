@@ -9,7 +9,7 @@ D = [D_1 D_1 D_2 D_2 D_3 D_3];
 N_instantaneous=50;
 
 %Parameters from (Tang et al., 2018) 
-B_1=4.26;  
+B_1=0;  
 gamma = 0.3;
 L_R=0.34;
 delta_rho=0.016;
