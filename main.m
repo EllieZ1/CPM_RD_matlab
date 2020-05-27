@@ -48,8 +48,8 @@ com = @(x) [sum(sum(i.*x)),sum(sum(j.*x))]/nnz(x);
 
 %parameter for the CPM scaled by length of a lattice point
 
-lam_a=1*len^4; %energy cost of area change
-lam_p=3*len^2; %energy cost of permiter change
+lam_a=3*len^4; %energy cost of area change
+lam_p=9*len^2; %energy cost of permiter change
 J=0*len; %energy cost of change in medium contact
 
 B_rho=2e4;%chemical potential rho
