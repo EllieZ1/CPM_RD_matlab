@@ -116,12 +116,31 @@ end
 
 numDiff=0;
 numReac=0;
+max_B=40;
+aveRac=[];
+aveRho=[];
+avePax=[];
 
 last_time=time; %used to time the CMP_step
 tic
 while time<finaltime
     A=nnz(cell_mask); %current area
     cell_inds(1:A)=find(cell_mask); %all cell sites padded with 0s
+    
+    %establishes a temporal gradient in B
+    %this is done to demonstrate hysteresis
+    
+    if time <= (finaltime/2)
+        B_1 = (max_B/(finaltime/2))*time; %increasing linearly until halfway point
+    else 
+        B_1 = -(max_B/(finaltime/2))*time+(max_B*2); %decreasing linearly after halfway point
+    end
+    
+    %Recalculating values effected by a changing B 
+    reaction(:,:,5) = B_1*(K.^m./(L_K^m+K.^m));   %From unphosphorylated Pax to phosphorylated Pax
+    alpha_chem(:,:,5) = reaction(:,:,5).*x(:,:,5); %chemical reaction
+    a_total = sum(alpha_diff,'all')+sum(alpha_chem,'all');    %Total propensity
+   
     
     while (time-last_time)<(len/vmax)
         
@@ -155,6 +174,10 @@ while time<finaltime
     for kk=1:Per %itterates CPM step Per times
         CPM_step
     end
+    
+    aveRac=[aveRac [B_1;sum(x(:,:,4),'all')/(sum(x(:,:,4),'all')+sum(x(:,:,2),'all')+sum(x(:,:,7),'all'))]];
+    aveRho=[aveRho [B_1;sum(x(:,:,3),'all')/(sum(x(:,:,3),'all')+sum(x(:,:,1),'all'))]];
+    avePax=[avePax [B_1;sum(x(:,:,6),'all')/(sum(x(:,:,6),'all')+sum(x(:,:,5),'all')+sum(x(:,:,8),'all'))]];
     
     enumerate_diffusion %recaucluates diffusable cites
 end
