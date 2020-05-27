@@ -82,7 +82,7 @@ for kk=1:nrx
         if reacted==false %making sure the code works
             error('Oh no! D: diffusion propensites did not sum correctly')
         end
-        
+        numDiff=numDiff+1;
     else% ---------- Reaction Time -------------
         reacted=false;      
         temp=sum(alpha_diff(:));
@@ -105,7 +105,7 @@ for kk=1:nrx
         if reacted==false
             error('Oh no! D: chemical reaction propensites did not sum correctly')
         end
-        
+        numReac=numReac+1;
         %Inactive rho to active rho
         if rx==1
             x(i+(3-1)*sz) = x(i+(3-1)*sz)+1;
