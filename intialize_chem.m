@@ -100,7 +100,7 @@ RbarRatio(isnan(RbarRatio))=0;
 
 %----reactions propensites that vary lattice ot lattice 
 K_is=1./((1+k_X*PIX+k_G*k_X*k_C*GIT*PIX*Paxtot*PaxRatio).*(1+alpha_R*RacRatio)+k_G*k_X*GIT*PIX);
-K=RbarRatio/gamma;         %changed from paper
+K=alpha_R*RacRatio.*K_is.*(1+k_X*PIX+k_G*k_X*k_C*Paxtot*GIT*PIX*PaxRatio);%RbarRatio/gamma;         %changed from paper
 I_Ks=I_K*(1-K_is.*(1+alpha_R*RacRatio));
 reaction(:,:,1) = I_rho*(L_R^m./(L_R^m +(RacRatio+RbarRatio).^m));            %From inactive rho to active rho changed from model
 reaction(:,:,2) = (I_R+I_Ks).*(L_rho^m./(L_rho^m+RhoRatio.^m));
