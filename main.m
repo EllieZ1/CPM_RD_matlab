@@ -84,7 +84,7 @@ Results=zeros(N,N,N_species+1,floor(finaltime/picstep)+1); %an array where we st
 
 pic %takes a frame for the video
 
-nrx=2e4; %number of times reactions are carried out in a chem_func loop
+nrx=1e3; %number of times reactions are carried out in a chem_func loop
 reactions=0; %intializing a reaction counter
 
 %intializing variables for enumerate_diffusion.m making sure there size is
