@@ -2,9 +2,9 @@
 time=0;
 reactions=0;
 
-D_1=0.43;                  %inactive rho/rac
-D_2=0.02;                  %active rho/rac
-D_3=0.03;                  %pax
+D_1=0.0143;%0.43;                  %inactive rho/rac
+D_2=0.0007;%0.02;                  %active rho/rac
+D_3=0.001%0.03;                  %pax
 D = [D_1 D_1 D_2 D_2 D_3 D_3];
 N_instantaneous=50;
 
