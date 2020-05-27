@@ -114,7 +114,8 @@ if (1/a_total)*nrx>(len)/(4*vmax) %makes sure that you don't stay in the CPM__ch
     error('cell moving to fast consider lowering nrx')
 end
 
-
+numDiff=0;
+numReac=0;
 
 last_time=time; %used to time the CMP_step
 tic
