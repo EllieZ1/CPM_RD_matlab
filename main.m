@@ -10,7 +10,7 @@ vid = VideoWriter(['results'],'MPEG-4'); % this saves videos to mp4 change to wh
 open(vid);
 
 N_species=8; %number of chemical species
-finaltime=100; %time the simulation end
+finaltime=18000; %time the simulation end
 SF=500; % speed factor I divide molecule number by this for speed
 Gsize=100; %length of the grid in um
 N=50; % number of points used to discretize the grid
@@ -82,7 +82,7 @@ center(z,:)=com(cell_mask);
 
 Results=zeros(N,N,N_species+1,floor(finaltime/picstep)+1); %an array where we store results
 
-pic %takes a frame for the video
+%pic %takes a frame for the video
 
 nrx=1e3; %number of times reactions are carried out in a chem_func loop
 reactions=0; %intializing a reaction counter
@@ -116,6 +116,11 @@ end
 
 numDiff=0;
 numReac=0;
+%arrays recording Ratio change
+%after run, plot TRac/TRho over Timeseries
+Timeseries=[0];
+TRac=[0.3];
+TRho=[0.2];
 
 last_time=time; %used to time the CMP_step
 tic
@@ -139,7 +144,11 @@ while time<finaltime
         reactions=reactions+nrx; %reaction counter
         
         if time>=timecheck+picstep % takes video frames
-            pic
+            %pic
+            Timeseries=[Timeseries time];
+            TRac=[TRac sum(x(:,:,4),'all')/(sum(x(:,:,4),'all')+sum(x(:,:,2),'all')+sum(x(:,:,7),'all'))];
+            TRho=[TRho sum(x(:,:,3),'all')/(sum(x(:,:,3),'all')+sum(x(:,:,1),'all'))];
+
             z=z+1;
             center(z,:)=com(cell_mask);
             timecheck=timecheck+picstep;
