@@ -163,7 +163,7 @@ for kk=1:nrx
                 RbarRatio(isnan(RbarRatio))=0;
             end
             K_is(I)=1./((1+k_X*PIX+k_G*k_X*k_C*GIT*PIX*Paxtot*PaxRatio(I)).*(1+alpha_R*RacRatio(I))+k_G*k_X*GIT*PIX);
-            K(I)=RbarRatio(I)/gamma;         %changed from paper
+            K(I)=alpha_R*RacRatio(I).*K_is(I).*(1+k_X*PIX+k_G*k_X*k_C*Paxtot*GIT*PIX*PaxRatio(I));%RbarRatio(I)/gamma;         %changed from paper
             I_Ks(I)=I_K*(1-K_is(I).*(1+alpha_R*RacRatio(I)));
             reaction(I+(1-1)*sz) = I_rho*(L_R^m./(L_R^m +(RacRatio(I)+RbarRatio(I)).^m));            %From inactive rho to active rho changed from model
             reaction(I+(2-1)*sz) = (I_R+I_Ks(I)).*(L_rho^m./(L_rho^m+RhoRatio(I).^m));                %From inactive Rac to active Rac
@@ -210,7 +210,7 @@ for kk=1:nrx
                 RbarRatio(i)=0;
             end
             K_is(i)=1/((1+k_X*PIX+k_G*k_X*k_C*GIT*PIX*Paxtot*PaxRatio(i))*(1+alpha_R*RacRatio(i))+k_G*k_X*GIT*PIX);
-            K(i)=RbarRatio(i)/gamma;         %changed from paper
+            K(i)=alpha_R*RacRatio(i).*K_is(i).*(1+k_X*PIX+k_G*k_X*k_C*Paxtot*GIT*PIX*PaxRatio(i));%RbarRatio(i)/gamma;         %changed from paper
             I_Ks(i)=I_K*(1-K_is(i)*(1+alpha_R*RacRatio(i)));
             reaction(i+(1-1)*sz) = I_rho*(L_R^m/(L_R^m +(RacRatio(i)+RbarRatio(i))^m));            %From inactive rho to active rho changed from model
             reaction(i+(2-1)*sz) = (I_R+I_Ks(i))*(L_rho^m/(L_rho^m+RhoRatio(i)^m));                %From inactive Rac to active Rac
