@@ -10,7 +10,7 @@ vid = VideoWriter(['results'],'MPEG-4'); % this saves videos to mp4 change to wh
 open(vid);
 
 N_species=8; %number of chemical species
-finaltime=100; %time the simulation end
+finaltime=3600; %time the simulation end
 SF=500; % speed factor I divide molecule number by this for speed
 Gsize=100; %length of the grid in um
 N=50; % number of points used to discretize the grid
@@ -140,7 +140,7 @@ while time<finaltime
     reaction(:,:,5) = B_1*(K.^m./(L_K^m+K.^m));   %From unphosphorylated Pax to phosphorylated Pax
     alpha_chem(:,:,5) = reaction(:,:,5).*x(:,:,5); %chemical reaction
     a_total = sum(alpha_diff,'all')+sum(alpha_chem,'all');    %Total propensity
-   
+    alpha_rx=sum(alpha_chem(ir0 + cell_inds(1:A)));
     
     while (time-last_time)<(len/vmax)
         
