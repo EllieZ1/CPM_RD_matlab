@@ -37,7 +37,7 @@ for kk=1:nrx
     %Recalculating values effected by a changing B 
     reaction(:,:,5) = B_1*(K.^m./(L_K^m+K.^m));   %From unphosphorylated Pax to phosphorylated Pax
     alpha_chem(:,:,5) = reaction(:,:,5).*x(:,:,5); %chemical reaction
-    a_total = sum(alpha_diff,'all')+sum(alpha_chem,'all');    %Total propensity
+    a_total = sum(alpha_diff)+sum(alpha_rx(:));    %Total propensity
     alpha_rx=sum(alpha_chem(ir0 + cell_inds(1:A)));
     %{
     %total propensity for rxn+diff
