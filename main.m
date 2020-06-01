@@ -146,8 +146,8 @@ while time<finaltime
         if time>=timecheck+picstep % takes video frames
             %pic
             Timeseries=[Timeseries time];
-            TRac=[TRac sum(x(:,:,4),'all')/(sum(x(:,:,4),'all')+sum(x(:,:,2),'all')+sum(x(:,:,7),'all'))];
-            TRho=[TRho sum(x(:,:,3),'all')/(sum(x(:,:,3),'all')+sum(x(:,:,1),'all'))];
+            TRac=[TRac sum(sum(x(:,:,4))/(sum(sum(sum(x(:,:,[4 2 7]))))];
+            TRho=[TRho sum(sum(x(:,:,3))/(sum(sum(sum(x(:,:,[3 1]))))];
 
             z=z+1;
             center(z,:)=com(cell_mask);
