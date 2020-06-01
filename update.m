@@ -55,6 +55,7 @@ I_Ks(I)=I_K*(1-K_is(I).*(1+alpha_R*RacRatio(I)));
 reaction(I+(1-1)*sz) = I_rho*(L_R^m./(L_R^m +(RacRatio(I)+RbarRatio(I)).^m));            %From inactive rho to active rho changed from model
 reaction(I+(2-1)*sz) = (I_R+I_Ks(I)).*(L_rho^m./(L_rho^m+RhoRatio(I).^m));                %From inactive Rac to active Rac
 reaction(I+(5-1)*sz) = B_1*(K(I).^m./(L_K^m+K(I).^m));
+%to properly locate in alpha_chem(ir0+I)
 [tmp,tmp2]=meshgrid(ir0,I);
 tmp3=tmp+tmp2;
 alpha_chem(tmp3) = reaction(tmp3).*x(tmp3);
