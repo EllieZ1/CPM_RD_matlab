@@ -162,9 +162,9 @@ while time<finaltime
         CPM_step
     end
     %plot hysteresis diagram by plot(aveRac(1,:),aveRac(2,:))
-    aveRac=[aveRac [B_1;sum(x(:,:,4),'all')/(sum(x(:,:,4),'all')+sum(x(:,:,2),'all')+sum(x(:,:,7),'all'))]];
-    aveRho=[aveRho [B_1;sum(x(:,:,3),'all')/(sum(x(:,:,3),'all')+sum(x(:,:,1),'all'))]];
-    avePax=[avePax [B_1;sum(x(:,:,6),'all')/(sum(x(:,:,6),'all')+sum(x(:,:,5),'all')+sum(x(:,:,8),'all'))]];
+    aveRac=[aveRac [B_1; sum(sum(x(:,:,4))/(sum(sum(sum(x(:,:,[4 2 7]))))]];
+    aveRho=[aveRho [B_1; sum(sum(x(:,:,3))/(sum(sum(sum(x(:,:,[3 1]))))]];
+    avePax=[avePax [B_1; sum(sum(x(:,:,6))/(sum(sum(sum(x(:,:,[6 5 8]))))]];
     
     enumerate_diffusion %recaucluates diffusable cites
 end
