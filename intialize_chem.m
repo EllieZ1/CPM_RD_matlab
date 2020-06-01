@@ -48,8 +48,8 @@ Pax_Square = totalPax/(A);    %Average number of Pax per square
 R_eq=0; % i seet the equillbirum values to 0 so the Rac always causes exansion Rho always causes retraction
 rho_eq=0;
 
-RhoRatio = 0.3;
-RacRatio = 0.13;
+RhoRatio = 0.42;%0.3;
+RacRatio = 0.08;%0.13;
 PaxRatio = 0.15;
 
 
