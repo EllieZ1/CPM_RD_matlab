@@ -1,19 +1,19 @@
-clc
-clearvars
-close all;
-set(0,'DefaultFIgureVisible','on');
+%clc
+%clearvars
+%close all;
+%set(0,'DefaultFIgureVisible','on');
 %restarting the environment
 
-mkdir 'results'
+%mkdir 'results'
 %vid = VideoWriter(['results'],'MPEG-4'); % this saves videos to mp4 change to whatever's convenient
 
 %open(vid);
 
 N_species=8; %number of chemical species
-finaltime=7200; %time the simulation end
-SF=500; % speed factor I divide molecule number by this for speed
+finaltime=18000; %time the simulation end
+SF=10; % speed factor I divide molecule number by this for speed
 Gsize=100; %length of the grid in um
-N=50; % number of points used to discretize the grid
+N=20; % number of points used to discretize the grid
 sz=N^2;
 len=Gsize/N; %length of a latice square
 [j, i,] = meshgrid(1:N,1:N); %the i and j need to be reversed for some reason (\_(:0)_/)
@@ -84,7 +84,7 @@ Results=zeros(N,N,N_species+1,floor(finaltime/picstep)+1); %an array where we st
 
 %pic %takes a frame for the video
 
-nrx=1e3; %number of times reactions are carried out in a chem_func loop
+nrx=3e4; %number of times reactions are carried out in a chem_func loop
 reactions=0; %intializing a reaction counter
 
 %intializing variables for enumerate_diffusion.m making sure there size is
@@ -116,6 +116,12 @@ end
 
 numDiff=0;
 numReac=0;
+%arrays recording Ratio change
+%after run, plot TRac/TRho over Timeseries
+Timeseries=[];
+TRac=[];
+TRho=[];
+TPax=[];
 max_B=40;
 aveRac=[];
 aveRho=[];
@@ -126,26 +132,37 @@ tic
 while time<finaltime
     A=nnz(cell_mask); %current area
     cell_inds(1:A)=find(cell_mask); %all cell sites padded with 0s
-    
-    
-    
+
     while (time-last_time)<(len/vmax)
-        
+        %establishes a temporal gradient in B
+        %this is done to demonstrate hysteresis
+
+        if time <= (finaltime/2)
+            B_1 = (max_B/(finaltime/2))*time; %increasing linearly until halfway point
+        else 
+            B_1 = -(max_B/(finaltime/2))*time+(max_B*2); %decreasing linearly after halfway point
+        end
+    
         % has to be a function to be put under a c wrapper (slow part)
         [x,diffusing_species_sum,D,h,alpha_rx,num_diffuse,...
             alpha_chem,time,diffuse_mask,PaxRatio,RhoRatio,K_is,K,...
-            RacRatio,RbarRatio,I_Ks,reaction,ij_diffuse,jump,ir0,id0,...
+            RacRatio,RbarRatio,I_Ks,reaction,ij_diffuse,jump,ir0,id0,cell_inds,...
             k_X,PIX,k_G,k_C,GIT,Paxtot,alpha_R,gamma,I_K,I_rho,I_R,L_R,m,L_rho,B_1,L_K,...
-            alpha,PAKtot,numDiff,numReac,finaltime,max_B] =  CPM_chem_func(x,diffusing_species_sum,D,h,alpha_rx,num_diffuse,...
+            alpha,PAKtot,numDiff,numReac] =  CPM_chem_func_mex(x,diffusing_species_sum,D,h,alpha_rx,num_diffuse,...
             alpha_chem,time,diffuse_mask,PaxRatio,RhoRatio,K_is,K,...
             RacRatio,RbarRatio,I_Ks,reaction,ij_diffuse,jump,ir0,id0,cell_inds,...
             k_X,PIX,k_G,k_C,GIT,Paxtot,alpha_R,gamma,I_K,I_rho,I_R,L_R,m,L_rho,B_1,L_K,...
-            alpha,PAKtot,nrx,A,numDiff,numReac,finaltime,max_B);
-        
+            alpha,PAKtot,nrx,A,numDiff,numReac);
+
         reactions=reactions+nrx; %reaction counter
-        
+
         if time>=timecheck+picstep % takes video frames
             %pic
+            Timeseries=[Timeseries time];
+            TRac=[TRac sum(sum(x(:,:,4))/(sum(sum(sum(x(:,:,[4 2 7]))))))];
+            TRho=[TRho sum(sum(x(:,:,3))/(sum(sum(sum(x(:,:,[3 1]))))))];
+            TPax=[TPax sum(sum(x(:,:,6)))/sum(sum(sum(x(:,:,[6 5 8]))))];
+
             z=z+1;
             center(z,:)=com(cell_mask);
             timecheck=timecheck+picstep;
@@ -153,22 +170,21 @@ while time<finaltime
             reactions
             toc
         end
-        
+
     end
-    
+
     last_time=time;
     
     for kk=1:Per %itterates CPM step Per times
         CPM_step
     end
     %plot hysteresis diagram by plot(aveRac(1,:),aveRac(2,:))
-    aveRac=[aveRac [B_1; sum(sum(x(:,:,4))/(sum(sum(sum(x(:,:,[4 2 7]))))]];
-    aveRho=[aveRho [B_1; sum(sum(x(:,:,3))/(sum(sum(sum(x(:,:,[3 1]))))]];
-    avePax=[avePax [B_1; sum(sum(x(:,:,6))/(sum(sum(sum(x(:,:,[6 5 8]))))]];
-    
+    aveRac=[aveRac [B_1;sum(sum(x(:,:,4))/(sum(sum(sum(x(:,:,[4 2 7]))))))]];
+    aveRho=[aveRho [B_1;sum(sum(x(:,:,3))/(sum(sum(sum(x(:,:,[3 1]))))))]];
+    avePax=[avePax [B_1;sum(sum(x(:,:,6))/(sum(sum(sum(x(:,:,[6 5 8]))))))]];
     enumerate_diffusion %recaucluates diffusable cites
 end
-
+%{
 %calculates speed by the distance the COM moved every 120s 
 %thats (how they do it experimentally)
 dx=zeros(floor(finaltime/120),1);
@@ -178,10 +194,17 @@ for i=2:length(dx-1)
 end
 v=dx/120*3600;
 
+
+figure(1);
+plot(Timeseries,TRho,Timeseries,TRac,Timeseries,TPax);
+legend('Rho','Rac','Pax','Location','Best');
+xlabel('Time');
+title(['B = ' num2str(B_1)]);
+%}
 %saving final results 
 toc
 %close(vid);
-cur=pwd;
-cd results
+%cur=pwd;
+%cd results
 save(['final'])
-cd(cur)
+%cd(cur)
