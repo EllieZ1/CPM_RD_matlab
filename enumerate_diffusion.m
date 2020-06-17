@@ -7,6 +7,9 @@ for drx=1:size(jump,2) %itterating over all possible directions
     ij_diffuse(drx,:)=[ij0(diffuse_mask(drx,:))' zeros(1,(N)*(N)-num_diffuse(drx))];
     %storing diffusible species in an array padded with zeros so its of a constant length
 end
+for vox=1:size(diffuse_mask,2)
+    num_vox_diff(vox)=nnz(diffuse_mask(:,vox)); %total number of pssoible diffusion reactions in a voxel
+end
 
 id0=(diffusing_species-1)*sz;
 

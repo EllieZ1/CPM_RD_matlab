@@ -53,5 +53,7 @@ Results(:,:,1,z)=cell_mask;
 Results(:,:,2:(N_species+1),z)=x; %storing the results 
 drawnow
 %adding videos the frame 
+
+%frames=[frames getframe(gcf)];
 frame=getframe(gcf);
 writeVideo(vid,frame);

@@ -2,14 +2,14 @@
 time=0;
 reactions=0;
 
-D_1=0.43;                  %inactive rho/rac
-D_2=0.02;                  %active rho/rac
-D_3=0.03;                  %pax
+D_1=0.0143;%0.43;                  %inactive rho/rac
+D_2=0.0007;%0.02;                  %active rho/rac
+D_3=0.001;%0.03;                  %pax
 D = [D_1 D_1 D_2 D_2 D_3 D_3];
 N_instantaneous=50;
 
 %Parameters from (Tang et al., 2018) 
-B_1=4.26;  
+B_1=4;  
 gamma = 0.3;
 L_R=0.34;
 delta_rho=0.016;
@@ -47,12 +47,23 @@ Pax_Square = totalPax/(A);    %Average number of Pax per square
 
 R_eq=0; % i seet the equillbirum values to 0 so the Rac always causes exansion Rho always causes retraction
 rho_eq=0;
+%
+%run testing.m to find saddle point
+RhoRatio=0;
+RacRatio=0;
+PaxRatio=0;
+[RhoRatio,RacRatio,PaxRatio,B_1,ss1,ss2,ss3] = testing(RhoRatio,RacRatio,PaxRatio,B_1);
 
-RhoRatio = 0.3;
-RacRatio = 0.13;
-PaxRatio = 0.15;
-
-
+%}
+%{
+RhoRatio = 0.38;%0.3732;
+RacRatio = 0.12;
+PaxRatio = 0.24;
+%
+RhoRatio = 0.42;%0.3;
+RacRatio = 0.08;%0.13;
+PaxRatio = 0.11;
+%}
 numberofC = Rho_Square*RhoRatio;           %active Rho
 numberofD = Rac_Square*RacRatio;           %active Rac
 numberofF = Pax_Square*PaxRatio;           %phosphorylated Pax
@@ -100,7 +111,7 @@ RbarRatio(isnan(RbarRatio))=0;
 
 %----reactions propensites that vary lattice ot lattice 
 K_is=1./((1+k_X*PIX+k_G*k_X*k_C*GIT*PIX*Paxtot*PaxRatio).*(1+alpha_R*RacRatio)+k_G*k_X*GIT*PIX);
-K=RbarRatio/gamma;         %changed from paper
+K=alpha_R*RacRatio.*K_is.*(1+k_X*PIX+k_G*k_X*k_C*Paxtot*GIT*PIX*PaxRatio);%RbarRatio/gamma;         %changed from paper
 I_Ks=I_K*(1-K_is.*(1+alpha_R*RacRatio));
 reaction(:,:,1) = I_rho*(L_R^m./(L_R^m +(RacRatio+RbarRatio).^m));            %From inactive rho to active rho changed from model
 reaction(:,:,2) = (I_R+I_Ks).*(L_rho^m./(L_rho^m+RhoRatio.^m));

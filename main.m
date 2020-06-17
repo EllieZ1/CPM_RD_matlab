@@ -1,7 +1,7 @@
-clc
-clearvars
-close all;
-set(0,'DefaultFIgureVisible','on');
+%clc
+%clearvars
+%close all;
+%set(0,'DefaultFIgureVisible','on');
 %restarting the environment
 
 mkdir 'results'
@@ -10,10 +10,10 @@ vid = VideoWriter(['results'],'MPEG-4'); % this saves videos to mp4 change to wh
 open(vid);
 
 N_species=8; %number of chemical species
-finaltime=100; %time the simulation end
-SF=500; % speed factor I divide molecule number by this for speed
+finaltime=3600; %time the simulation end
+SF=4; % speed factor I divide molecule number by this for speed
 Gsize=100; %length of the grid in um
-N=50; % number of points used to discretize the grid
+N=20; % number of points used to discretize the grid
 sz=N^2;
 len=Gsize/N; %length of a latice square
 [j, i,] = meshgrid(1:N,1:N); %the i and j need to be reversed for some reason (\_(:0)_/)
@@ -48,8 +48,8 @@ com = @(x) [sum(sum(i.*x)),sum(sum(j.*x))]/nnz(x);
 
 %parameter for the CPM scaled by length of a lattice point
 
-lam_a=1*len^4; %energy cost of area change
-lam_p=3*len^2; %energy cost of permiter change
+lam_a=3*len^4; %energy cost of area change
+lam_p=9*len^2; %energy cost of permiter change
 J=0*len; %energy cost of change in medium contact
 
 B_rho=2e4;%chemical potential rho
@@ -84,7 +84,7 @@ Results=zeros(N,N,N_species+1,floor(finaltime/picstep)+1); %an array where we st
 
 pic %takes a frame for the video
 
-nrx=2e4; %number of times reactions are carried out in a chem_func loop
+nrx=3e4; %number of times reactions are carried out in a chem_func loop
 reactions=0; %intializing a reaction counter
 
 %intializing variables for enumerate_diffusion.m making sure there size is
@@ -96,6 +96,16 @@ ij_diffuse=zeros(4,(N)*(N));
 diffusing_species_sum=zeros(size(jump,2),6);
 
 enumerate_diffusion %determines the possible diffusion reactions in a way that be convereted to c
+
+pmax=0.5;%max allowed pT for one cell
+
+dt=pmax*(h^2)/(max(D)*size(diffuse_mask,1));%auto-determine timestep
+jumpp=jump';%this may speed up things, but probably not
+
+
+
+pT = zeros(size(num_vox_diff,2),length(D));
+pi = zeros(size(diffuse_mask,1),sz);
 
 %vectorized indcies for the reaction and diffusion propensites
 id0=(diffusing_species-1)*sz;
@@ -114,31 +124,68 @@ if (1/a_total)*nrx>(len)/(4*vmax) %makes sure that you don't stay in the CPM__ch
     error('cell moving to fast consider lowering nrx')
 end
 
-
-
+numDiff=0;
+numReac=0;
+%arrays recording Ratio change
+%after run, plot TRac/TRho over Timeseries
+Timeseries=[];
+TRac=[];
+TRho=[];
+TPax=[];
+max_B=40;
+aveRac=[];
+aveRho=[];
+avePax=[];
+%tauminc=0;
 last_time=time; %used to time the CMP_step
+
+%pre-compute single molecule diffusion probabilities for the timestep of
+%length dt, as well as the directional probabilities
+%this must be re-run everytime cell-geometry changes
+for i=1:A
+    vox=cell_inds(i);
+    pT(vox,:) = num_vox_diff(vox)*D*dt/(h^2);
+    pi(:,vox)=diffuse_mask(:,vox)'./sum(diffuse_mask(:,vox));
+end
 tic
 while time<finaltime
     A=nnz(cell_mask); %current area
     cell_inds(1:A)=find(cell_mask); %all cell sites padded with 0s
-    
-    while (time-last_time)<(len/vmax)
-        
+    %{
+    tau  = (1./sum(alpha_chem,3)).*log(1./rand(N,N)); % time increment
+    [taumin,ir]=min(tau,[],'all','linear');
+    tauminc = tauminc+taumin;
+   %}
+        %establishes a temporal gradient in B
+        %this is done to demonstrate hysteresis
+        %{
+        if time <= (finaltime/2)
+            B_1 = (max_B/(finaltime/2))*time; %increasing linearly until halfway point
+        else 
+            B_1 = -(max_B/(finaltime/2))*time+(max_B*2); %decreasing linearly after halfway point
+        end
+        %}
         % has to be a function to be put under a c wrapper (slow part)
+        
         [x,diffusing_species_sum,D,h,alpha_rx,num_diffuse,...
-            alpha_chem,time,diffuse_mask,PaxRatio,RhoRatio,K_is,K,...
-            RacRatio,RbarRatio,I_Ks,reaction,ij_diffuse,jump,ir0,id0,...
-            k_X,PIX,k_G,k_C,GIT,Paxtot,alpha_R,gamma,I_K,I_rho,I_R,L_R,m,L_rho,B_1,L_K,...
-            alpha,PAKtot] =  CPM_chem_func(x,diffusing_species_sum,D,h,alpha_rx,num_diffuse,...
             alpha_chem,time,diffuse_mask,PaxRatio,RhoRatio,K_is,K,...
             RacRatio,RbarRatio,I_Ks,reaction,ij_diffuse,jump,ir0,id0,cell_inds,...
             k_X,PIX,k_G,k_C,GIT,Paxtot,alpha_R,gamma,I_K,I_rho,I_R,L_R,m,L_rho,B_1,L_K,...
-            alpha,PAKtot,nrx,A);
+            alpha,PAKtot,numDiff,numReac] =  CPM_chem_func_mex(x,diffusing_species_sum,D,h,alpha_rx,num_diffuse,...
+            alpha_chem,time,diffuse_mask,PaxRatio,RhoRatio,K_is,K,...
+            RacRatio,RbarRatio,I_Ks,reaction,ij_diffuse,jump,ir0,id0,cell_inds,...
+            k_X,PIX,k_G,k_C,GIT,Paxtot,alpha_R,gamma,I_K,I_rho,I_R,L_R,m,L_rho,B_1,L_K,...
+            alpha,PAKtot,nrx,A,numDiff,numReac,N,dt);
         
-        reactions=reactions+nrx; %reaction counter
-        
+        %reactions=reactions+nrx; %reaction counter
+
         if time>=timecheck+picstep % takes video frames
             pic
+            Timeseries=[Timeseries time];
+            TRac=[TRac sum(sum(x(:,:,4))/(sum(sum(sum(x(:,:,[4 2 7]))))))];
+            TRho=[TRho sum(sum(x(:,:,3))/(sum(sum(sum(x(:,:,[3 1]))))))];
+            TPax=[TPax sum(sum(x(:,:,6)))/sum(sum(sum(x(:,:,[6 5 8]))))];
+
             z=z+1;
             center(z,:)=com(cell_mask);
             timecheck=timecheck+picstep;
@@ -146,18 +193,49 @@ while time<finaltime
             reactions
             toc
         end
-        
-    end
+    %---------------------diffusion--------------------------
+        x=Alg3_mex(x,dt,D,len,jumpp,diffuse_mask,pT,pi,cell_inds,A);
+        time=time+dt;
+        tauminc=0;
+        RhoRatio=x(:,:,3)./(x(:,:,3)+x(:,:,1));
+        RhoRatio(isnan(RhoRatio))=0;
+        RacRatio=x(:,:,4)./(x(:,:,4)+x(:,:,2)+x(:,:,7));
+        RacRatio(isnan(RacRatio))=0;
+        PaxRatio=x(:,:,6)./(x(:,:,6)+x(:,:,5)+x(:,:,8));
+        PaxRatio(isnan(PaxRatio))=0;
+        RbarRatio=x(:,:,7)./(x(:,:,4)+x(:,:,2)+x(:,:,7));  % this is gamma*K    
+        RbarRatio(isnan(RbarRatio))=0;
+
+        %----reactions propensites that vary lattice ot lattice 
+        K_is=1./((1+k_X*PIX+k_G*k_X*k_C*GIT*PIX*Paxtot*PaxRatio).*(1+alpha_R*RacRatio)+k_G*k_X*GIT*PIX);
+        K=alpha_R*RacRatio.*K_is.*(1+k_X*PIX+k_G*k_X*k_C*Paxtot*GIT*PIX*PaxRatio);%RbarRatio/gamma;         %changed from paper
+        I_Ks=I_K*(1-K_is.*(1+alpha_R*RacRatio));
+        reaction(:,:,1) = I_rho*(L_R^m./(L_R^m +(RacRatio+RbarRatio).^m));            %From inactive rho to active rho changed from model
+        reaction(:,:,2) = (I_R+I_Ks).*(L_rho^m./(L_rho^m+RhoRatio.^m));
+        reaction(:,:,5) = B_1*(K.^m./(L_K^m+K.^m));
+        alpha_chem=reaction(:,:,1:6).*x(:,:,1:6);
+
     
+
     last_time=time;
     
     for kk=1:Per %itterates CPM step Per times
         CPM_step
     end
     
+    %plot hysteresis diagram by plot(aveRac(1,:),aveRac(2,:))
+    aveRac=[aveRac [B_1;sum(sum(x(:,:,4))/(sum(sum(sum(x(:,:,[4 2 7]))))))]];
+    aveRho=[aveRho [B_1;sum(sum(x(:,:,3))/(sum(sum(sum(x(:,:,[3 1]))))))]];
+    avePax=[avePax [B_1;sum(sum(x(:,:,6))/(sum(sum(sum(x(:,:,[6 5 8]))))))]];
     enumerate_diffusion %recaucluates diffusable cites
+    A=nnz(cell_mask); %current area
+    for i=1:A
+        vox=cell_inds(i);
+        pT(vox,:) = num_vox_diff(vox)*D*dt/(h^2);
+        pi(:,vox)=diffuse_mask(:,vox)'./sum(diffuse_mask(:,vox));
+    end
 end
-
+%{
 %calculates speed by the distance the COM moved every 120s 
 %thats (how they do it experimentally)
 dx=zeros(floor(finaltime/120),1);
@@ -167,6 +245,13 @@ for i=2:length(dx-1)
 end
 v=dx/120*3600;
 
+
+figure(1);
+plot(Timeseries,TRho,Timeseries,TRac,Timeseries,TPax);
+legend('Rho','Rac','Pax','Location','Best');
+xlabel('Time');
+title(['B = ' num2str(B_1)]);
+%}
 %saving final results 
 toc
 close(vid);
@@ -174,3 +259,4 @@ cur=pwd;
 cd results
 save(['final'])
 cd(cur)
+%save(name)

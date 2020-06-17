@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.coder" plugin-version="R2018b">
-  <configuration build-checksum="3556523820" file="/Users/qianyizhang/Desktop/Anmar Lab/new/fast_diff/CPM_chem_func.prj" location="/Users/qianyizhang/Desktop/Anmar Lab/new/fast_diff" name="CPM_chem_func" target="target.unifiedcoder" target-name="MATLAB Coder">
+  <configuration build-checksum="1442765951" file="/Users/qianyizhang/Desktop/Anmar Lab/new/fast_diff/Alg3.prj" location="/Users/qianyizhang/Desktop/Anmar Lab/new/fast_diff" name="Alg3" target="target.unifiedcoder" target-name="MATLAB Coder">
     <profile key="profile.mex">
       <param.BuiltInstrumentedMex>false</param.BuiltInstrumentedMex>
       <param.RanInstrumentedMex>false</param.RanInstrumentedMex>
@@ -840,7 +840,7 @@
     </param.TestSnippets>
     <param.ExternalFcnMajority>column</param.ExternalFcnMajority>
     <param.UseGlobals>option.UseGlobals.No</param.UseGlobals>
-    <param.outputfile>${PROJECT_ROOT}/codegen/lib/CPM_chem_func/CPM_chem_func.a</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/codegen/lib/Alg3/Alg3.a</param.outputfile>
     <param.version>R2012a</param.version>
     <param.HasECoderFeatures>false</param.HasECoderFeatures>
     <param.HasGpuCoder>false</param.HasGpuCoder>
@@ -855,7 +855,7 @@
     <param.AutoInferUnboundedSizeThreshold>2048</param.AutoInferUnboundedSizeThreshold>
     <param.EnableFixedPointStep>false</param.EnableFixedPointStep>
     <param.EnableScreener>true</param.EnableScreener>
-    <param.AnnotationChecksum>1524770323</param.AnnotationChecksum>
+    <param.AnnotationChecksum>1937541446</param.AnnotationChecksum>
     <var.LegacyTarget />
     <var.MirrorOnOpen>false</var.MirrorOnOpen>
     <param.FixedPointEnabled>false</param.FixedPointEnabled>
@@ -865,12 +865,12 @@
     <var.gc.lastOutputRoot />
     <var.gc.lastOutputType />
     <var.gc.preBuildChecksum />
-    <var.cfi.lastOutputRoot>codegen/mex/CPM_chem_func</var.cfi.lastOutputRoot>
-    <var.cfi.preBuildChecksum>3959250485</var.cfi.preBuildChecksum>
+    <var.cfi.lastOutputRoot>codegen/mex/Alg3</var.cfi.lastOutputRoot>
+    <var.cfi.preBuildChecksum>829747853</var.cfi.preBuildChecksum>
     <var.lastCfiTestSnippet>main</var.lastCfiTestSnippet>
     <var.outdatedOnRestore>false</var.outdatedOnRestore>
     <var.lastUserSourceChecksum />
-    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/qianyizhang/Desktop/Anmar Lab/new/fast_diff/CPM_chem_func.m&lt;/file&gt;&lt;file&gt;/Users/qianyizhang/Desktop/Anmar Lab/new/fast_diff/update.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
+    <var.sourceSetState>&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;sourceModel&gt;&lt;primarySourceFiles&gt;&lt;file&gt;/Users/qianyizhang/Desktop/Anmar Lab/new/fast_diff/Alg3.m&lt;/file&gt;&lt;file&gt;/Users/qianyizhang/Desktop/Anmar Lab/new/fast_diff/Alg5.m&lt;/file&gt;&lt;file&gt;/Users/qianyizhang/Desktop/Anmar Lab/new/fast_diff/incbeta.m&lt;/file&gt;&lt;file&gt;/Users/qianyizhang/Desktop/Anmar Lab/new/fast_diff/sample_mi.m&lt;/file&gt;&lt;/primarySourceFiles&gt;&lt;fixedPointSourceFiles/&gt;&lt;fixedPointSourceRegistered&gt;false&lt;/fixedPointSourceRegistered&gt;&lt;fixedPointSourceSelected&gt;false&lt;/fixedPointSourceSelected&gt;&lt;/sourceModel&gt;</var.sourceSetState>
     <param.forceMexBuild>false</param.forceMexBuild>
     <param.NoDefaultJIT>false</param.NoDefaultJIT>
     <param.configImportActive>false</param.configImportActive>
@@ -879,10 +879,10 @@
     <var.boundToGui>true</var.boundToGui>
     <var.isConfigDialog>false</var.isConfigDialog>
     <var.ecoderEnabled>false</var.ecoderEnabled>
-    <param.mex.outputfile>CPM_chem_func_mex</param.mex.outputfile>
-    <param.grt.outputfile>CPM_chem_func</param.grt.outputfile>
+    <param.mex.outputfile>Alg3_mex</param.mex.outputfile>
+    <param.grt.outputfile>Alg3</param.grt.outputfile>
     <param.artifact>option.target.artifact.lib</param.artifact>
-    <param.outputfile>${PROJECT_ROOT}/codegen/lib/CPM_chem_func/CPM_chem_func.a</param.outputfile>
+    <param.outputfile>${PROJECT_ROOT}/codegen/lib/Alg3/Alg3.a</param.outputfile>
     <param.CppNamespace />
     <param.gpu.Enabled>false</param.gpu.Enabled>
     <param.gpu.KernelNamePrefix />
@@ -1078,62 +1078,26 @@
       <param.FixedPointUseDesignRanges />
     </unset>
     <fileset.entrypoints>
-      <file custom-data-expanded="false" value="${PROJECT_ROOT}/CPM_chem_func.m">
-        <Marker>1592408752973</Marker>
+      <file custom-data-expanded="false" value="${PROJECT_ROOT}/Alg3.m">
+        <Marker>1592407585961</Marker>
       </file>
     </fileset.entrypoints>
     <fileset.testbench>
       <file>${PROJECT_ROOT}/main.m</file>
     </fileset.testbench>
     <fileset.inputtypes>
-      <file custom-data-expanded="false" value="${PROJECT_ROOT}/CPM_chem_func.m">
-        <Inputs fileName="CPM_chem_func.m" functionName="CPM_chem_func">
-          <Input Name="x" typeId="0" />
-          <Input Name="diffusing_species_sum" typeId="1" />
+      <file custom-data-expanded="false" value="${PROJECT_ROOT}/Alg3.m">
+        <Inputs fileName="Alg3.m" functionName="Alg3">
+          <Input Name="x0" typeId="0" />
+          <Input Name="dt" typeId="1" />
           <Input Name="D" typeId="2" />
-          <Input Name="h" typeId="3" />
-          <Input Name="alpha_rx" typeId="2" />
-          <Input Name="num_diffuse" typeId="4" />
-          <Input Name="alpha_chem" typeId="5" />
-          <Input Name="time" typeId="3" />
-          <Input Name="diffuse_mask" typeId="6" />
-          <Input Name="PaxRatio" typeId="7" />
-          <Input Name="RhoRatio" typeId="7" />
-          <Input Name="K_is" typeId="7" />
-          <Input Name="K" typeId="7" />
-          <Input Name="RacRatio" typeId="7" />
-          <Input Name="RbarRatio" typeId="7" />
-          <Input Name="I_Ks" typeId="7" />
-          <Input Name="reaction" typeId="8" />
-          <Input Name="ij_diffuse" typeId="9" />
-          <Input Name="jump" typeId="10" />
-          <Input Name="ir0" typeId="2" />
-          <Input Name="id0" typeId="2" />
-          <Input Name="cell_inds" typeId="11" />
-          <Input Name="k_X" typeId="3" />
-          <Input Name="PIX" typeId="3" />
-          <Input Name="k_G" typeId="3" />
-          <Input Name="k_C" typeId="3" />
-          <Input Name="GIT" typeId="3" />
-          <Input Name="Paxtot" typeId="3" />
-          <Input Name="alpha_R" typeId="3" />
-          <Input Name="gamma" typeId="3" />
-          <Input Name="I_K" typeId="3" />
-          <Input Name="I_rho" typeId="3" />
-          <Input Name="I_R" typeId="3" />
-          <Input Name="L_R" typeId="3" />
-          <Input Name="m" typeId="3" />
-          <Input Name="L_rho" typeId="3" />
-          <Input Name="B_1" typeId="3" />
-          <Input Name="L_K" typeId="3" />
-          <Input Name="alpha" typeId="3" />
-          <Input Name="PAKtot" typeId="3" />
-          <Input Name="nrx" typeId="3" />
-          <Input Name="A" typeId="3" />
-          <Input Name="numDiff" typeId="3" />
-          <Input Name="numReac" typeId="3" />
-          <Input Name="N" typeId="3" />
-          <Input Name="dt" typeId="3" />
+          <Input Name="h" typeId="1" />
+          <Input Name="jump" typeId="3" />
+          <Input Name="diffuse_mask" typeId="4" />
+          <Input Name="pT" typeId="5" />
+          <Input Name="pi" typeId="3" />
+          <Input Name="cell_inds" typeId="6" />
+          <Input Name="A" typeId="1" />
           <idpTable>
             <type typeId="0">
               <Class>double</Class>
@@ -1146,7 +1110,7 @@
             </type>
             <type typeId="1">
               <Class>double</Class>
-              <Size>4 x 6</Size>
+              <Size>1 x 1</Size>
               <Value />
               <InitialValue />
               <UserDefined>false</UserDefined>
@@ -1164,7 +1128,7 @@
             </type>
             <type typeId="3">
               <Class>double</Class>
-              <Size>1 x 1</Size>
+              <Size>4 x 400</Size>
               <Value />
               <InitialValue />
               <UserDefined>false</UserDefined>
@@ -1172,24 +1136,6 @@
               <Sparse>false</Sparse>
             </type>
             <type typeId="4">
-              <Class>double</Class>
-              <Size>1 x 4</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>false</UserDefined>
-              <Complex>false</Complex>
-              <Sparse>false</Sparse>
-            </type>
-            <type typeId="5">
-              <Class>double</Class>
-              <Size>20 x 20 x 6</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>false</UserDefined>
-              <Complex>false</Complex>
-              <Sparse>false</Sparse>
-            </type>
-            <type typeId="6">
               <Class>logical</Class>
               <Size>4 x 400</Size>
               <Value />
@@ -1197,43 +1143,16 @@
               <UserDefined>false</UserDefined>
               <Sparse>false</Sparse>
             </type>
-            <type typeId="7">
+            <type typeId="5">
               <Class>double</Class>
-              <Size>20 x 20</Size>
+              <Size>400 x 6</Size>
               <Value />
               <InitialValue />
               <UserDefined>false</UserDefined>
               <Complex>false</Complex>
               <Sparse>false</Sparse>
             </type>
-            <type typeId="8">
-              <Class>double</Class>
-              <Size>20 x 20 x 9</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>false</UserDefined>
-              <Complex>false</Complex>
-              <Sparse>false</Sparse>
-            </type>
-            <type typeId="9">
-              <Class>double</Class>
-              <Size>4 x 400</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>false</UserDefined>
-              <Complex>false</Complex>
-              <Sparse>false</Sparse>
-            </type>
-            <type typeId="10">
-              <Class>double</Class>
-              <Size>400 x 4</Size>
-              <Value />
-              <InitialValue />
-              <UserDefined>false</UserDefined>
-              <Complex>false</Complex>
-              <Sparse>false</Sparse>
-            </type>
-            <type typeId="11">
+            <type typeId="6">
               <Class>double</Class>
               <Size>400 x 1</Size>
               <Value />
@@ -1247,7 +1166,7 @@
       </file>
     </fileset.inputtypes>
     <build-deliverables>
-      <file location="${PROJECT_ROOT}/codegen/lib/CPM_chem_func" name="CPM_chem_func.a" optional="false">/Users/qianyizhang/Desktop/Anmar Lab/new/fast_diff/codegen/lib/CPM_chem_func/CPM_chem_func.a</file>
+      <file location="${PROJECT_ROOT}/codegen/lib/Alg3" name="Alg3.a" optional="false">/Users/qianyizhang/Desktop/Anmar Lab/new/fast_diff/codegen/lib/Alg3/Alg3.a</file>
     </build-deliverables>
     <workflow />
     <matlab>

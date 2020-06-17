@@ -9,7 +9,7 @@ bndry = find( bndry_cell | bndry_empty );
 if any(cell_maskp~=cell_mask)
     error('not reseting')
 end
-ij = bndry(randi(length(bndry)));
+ij = bndry(randi(length(bndry))); %selected boundary point
 
 r=randi(4);
 cell_maskp(ij) = cell_mask(jump(sub2ind([sz,4],ij,r)));% make a new trial configuration
@@ -29,8 +29,8 @@ if getfield(bwconncomp(cell_maskp,4),'NumObjects')==1 %makes sure the cell stays
             cell_mask=cell_maskp; %changing cell shape
             
             for j=0:(N_species-1) %splitting the molecules with the new lattice
-                x(ij+j*sz)=floor(x(jump(sub2ind([sz,4],ij,r))+j*sz)/2);
-                x(jump(sub2ind([sz,4],ij,r))+j*sz)=ceil(x(jump(sub2ind([sz,4],ij,r))+j*sz)/2);
+                x(ij+j*sz)=x(jump(sub2ind([sz,4],ij,r))+j*sz);%floor(x(jump(sub2ind([sz,4],ij,r))+j*sz)/2);
+                %x(jump(sub2ind([sz,4],ij,r))+j*sz)=ceil(x(jump(sub2ind([sz,4],ij,r))+j*sz)/2);
             end
             
             
@@ -68,7 +68,7 @@ if getfield(bwconncomp(cell_maskp,4),'NumObjects')==1 %makes sure the cell stays
             neighbors=neighbors(find(cell_maskp(neighbors)));
             
             for j=0:(N_species-1) %dumping out molecules from the retracting site
-                x(neighbors+j*sz)=x(neighbors +j*sz)+diff(round(linspace(0,x(ij+j*sz),length(neighbors)+1)));
+                %x(neighbors+j*sz)=x(neighbors +j*sz)+diff(round(linspace(0,x(ij+j*sz),length(neighbors)+1)));
                 x(ij+j*sz)=0;
             end
             
