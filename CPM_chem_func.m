@@ -9,7 +9,7 @@ function [x,diffusing_species_sum,D,h,alpha_rx,num_diffuse,...
     alpha,PAKtot,nrx,A,numDiff,numReac,N,dt)
 
 tauminc=0;
-tau  = (1./sum(alpha_chem,3)).*log(1./rand(N,N)); % time increment
+tau  = (1./sum(alpha_chem,3)).*log(1./rand(N,N)); % time increment of each voxel (not sure this is correct)
     [taumin,ir]=min(tau,[],'all','linear');
     tauminc = tauminc+taumin;
 N_instantaneous=50; % the number of steady reaction itterated at a moment in time 
